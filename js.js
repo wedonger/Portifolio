@@ -234,7 +234,7 @@ function isValidUrl(url) {
     const retroDuration = 4000;
 
     setTimeout(() => {
-        startLoadingTransition();
+        //startLoadingTransition();
     }, retroDuration);
 
     function startLoadingTransition() {
