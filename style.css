@@ -708,6 +708,66 @@ body::after {
   transform: translateY(-1px);
 }
 
+/* ===== LANGUAGE TOGGLE ===== */
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.lang-toggle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent-gradient);
+  opacity: 0;
+  transition: opacity var(--transition-smooth);
+  border-radius: var(--radius-sm);
+}
+
+.lang-toggle:hover {
+  color: #fff;
+  border-color: rgba(108, 92, 231, 0.4);
+  box-shadow: 0 0 20px rgba(108, 92, 231, 0.2);
+}
+
+.lang-toggle:hover::before {
+  opacity: 0.15;
+}
+
+.lang-toggle:hover .lang-globe {
+  animation: globeSpin 0.6s ease;
+}
+
+.lang-globe {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+#langLabel {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes globeSpin {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
 /* Mobile menu toggle */
 .nav-toggle {
   display: none;

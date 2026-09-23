@@ -205,6 +205,111 @@ function isValidUrl(url) {
 }
 
 // ============================================================
+// LANGUAGE / TRANSLATION SYSTEM (PT ↔ EN)
+// ============================================================
+
+const translations = {
+    // Navbar
+    nav_home:        { pt: "Início",       en: "Home" },
+    nav_projects:    { pt: "Projetos",     en: "Projects" },
+    nav_skills:      { pt: "Habilidades",  en: "Skills" },
+    nav_contact:     { pt: "Contato",      en: "Contact" },
+
+    // Hero
+    hero_greeting:     { pt: '<span class="wave">👋</span> Olá, eu sou',           en: '<span class="wave">👋</span> Hi, I\'m' },
+    hero_role:         { pt: "Desenvolvedor Full-Stack",                            en: "Full-Stack Developer" },
+    hero_description:  { pt: "Apaixonado por tecnologia e desenvolvimento de software. Gosto de encontrar soluções criativas para problemas, trabalho bem em equipe e adoro aprender coisas novas.",
+                         en: "Passionate about technology and software development. I enjoy finding creative solutions to problems, work well in teams, and love learning new things." },
+    hero_btn_projects: { pt: "Ver Projetos",  en: "View Projects" },
+    hero_btn_contact:  { pt: "Fale Comigo",   en: "Get in Touch" },
+
+    // Projects Section
+    projects_label:    { pt: "Portfólio",              en: "Portfolio" },
+    projects_title:    { pt: "Projetos em Destaque",   en: "Featured Projects" },
+    projects_subtitle: { pt: "Uma seleção dos projetos mais recentes e relevantes em que trabalhei, cobrindo diversas tecnologias e desafios.",
+                         en: "A selection of my most recent and relevant projects, covering various technologies and challenges." },
+    project1_desc:     { pt: "Jogo desenvolvido em uma GameJam junto com amigo, onde tivemos que correr contra o tempo e organizar as prioridades para finalizar o jogo. Foi o primeiro projeto de programação",
+                         en: "Game developed in a GameJam with a friend, where we had to race against time and prioritize tasks to finish the game. It was my first programming project" },
+    project2_desc:     { pt: "Segundo jogo em progresso juntamente com meu amigo, agora planejado e grande, com lore e level design pensado, usando unity 3D (WIP)",
+                         en: "Second game in progress with my friend, now planned and larger in scope, with thought-out lore and level design, using Unity 3D (WIP)" },
+    project3_desc:     { pt: "Jogo em desenvolvimento solo, usando unity 3D assemelhando-se a gameplay de Five Nights At Freddy's",
+                         en: "Solo game in development, using Unity 3D with gameplay resembling Five Nights At Freddy's" },
+
+    // Skills Section
+    skills_label:    { pt: "Expertise",                    en: "Expertise" },
+    skills_title:    { pt: "Habilidades & Tecnologias",    en: "Skills & Technologies" },
+    skills_subtitle: { pt: "As ferramentas e tecnologias que domino para entregar projetos de alta qualidade.",
+                       en: "The tools and technologies I master to deliver high-quality projects." },
+    skills_frontend: { pt: "Front-End",          en: "Front-End" },
+    skills_backend:  { pt: "Back-End",           en: "Back-End" },
+    skills_devops:   { pt: "DevOps & Ferramentas", en: "DevOps & Tools" },
+
+    // Contact Section
+    contact_label:    { pt: "Contato",                    en: "Contact" },
+    contact_title:    { pt: "Vamos Trabalhar Juntos?",    en: "Let's Work Together?" },
+    contact_subtitle: { pt: "Estou sempre aberto a novos projetos e oportunidades. Envie uma mensagem e vamos conversar!",
+                        en: "I'm always open to new projects and opportunities. Send me a message and let's talk!" },
+    contact_text:     { pt: "Seja para um projeto freelance, uma colaboração ou apenas para trocar uma ideia sobre tecnologia — ficarei feliz em ouvir de você.",
+                        en: "Whether it's a freelance project, a collaboration, or just to exchange ideas about technology — I'll be happy to hear from you." },
+
+    // Footer
+    footer_text: { pt: '© 2026 <span>Mathias Chechi Rohenkohl</span>. Todos os direitos reservados.',
+                   en: '© 2026 <span>Mathias Chechi Rohenkohl</span>. All rights reserved.' },
+};
+
+let currentLang = localStorage.getItem('portfolio-lang') || 'pt';
+
+function applyLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('portfolio-lang', lang);
+
+    // Update the toggle label
+    const langLabel = document.getElementById('langLabel');
+    if (langLabel) langLabel.textContent = lang.toUpperCase();
+
+    // Update the HTML lang attribute
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+
+    // Update all elements with data-i18n-key
+    document.querySelectorAll('[data-i18n-key]').forEach(el => {
+        const key = el.getAttribute('data-i18n-key');
+        if (translations[key] && translations[key][lang]) {
+            // Some keys need innerHTML (they contain HTML tags)
+            const htmlKeys = ['hero_greeting', 'footer_text'];
+            if (htmlKeys.includes(key)) {
+                el.innerHTML = translations[key][lang];
+            } else {
+                el.textContent = translations[key][lang];
+            }
+        }
+    });
+}
+
+// Language toggle click handler
+const langToggleBtn = document.getElementById('langToggle');
+if (langToggleBtn) {
+    langToggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const newLang = currentLang === 'pt' ? 'en' : 'pt';
+
+        // Add a spin animation to the globe
+        const globe = langToggleBtn.querySelector('.lang-globe');
+        if (globe) {
+            globe.style.animation = 'none';
+            globe.offsetHeight; // trigger reflow
+            globe.style.animation = 'globeSpin 0.5s ease';
+        }
+
+        applyLanguage(newLang);
+    });
+}
+
+// Apply saved language on load
+if (currentLang !== 'pt') {
+    applyLanguage(currentLang);
+}
+
+// ============================================================
 // RETRO → MODERN LOADING TRANSITION
 // ============================================================
 
@@ -234,7 +339,7 @@ function isValidUrl(url) {
     const retroDuration = 4000;
 
     setTimeout(() => {
-        //startLoadingTransition();
+        startLoadingTransition();
     }, retroDuration);
 
     function startLoadingTransition() {
